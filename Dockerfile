@@ -1,18 +1,8 @@
-FROM jenkins/jenkins:lts
+FROM openjdk:8-jre-alpine
 
-USER root
+EXPOSE 8090
 
-# Instalar Docker y Maven
-RUN apt-get update && apt-get install -y \
-    curl \
-    docker.io \
-    maven
+COPY /target/java-maven-app-1.1.0-SNAPSHOT.jar /usr/app
+WORKDIR /usr/app
 
-# Permisos para usar Docker dentro del contenedor
-RUN usermod -aG docker jenkins
-
-# Instalar Docker Compose
-RUN curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose \
-    && chmod +x /usr/local/bin/docker-compose
-
-USER jenkins
+ENTRYPOINT ["java",".jar","java-maven-app-1.1.0-SNAPSHOT.jar"]
